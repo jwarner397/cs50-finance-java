@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-// import java.io.*;
 
 /**
  * Created by cbay on 5/10/15.
@@ -36,10 +35,10 @@ public class StockHolding extends AbstractEntity {
 
     private StockHolding() {}
 
-    private StockHolding(String symbol, int sharesOwned, int ownerId) {
+    private StockHolding(String symbol, int ownerId) {
         // TODO - make sure symbol is always upper or lowercase (your choice)
         this.symbol = symbol.toUpperCase();
-        this.sharesOwned = sharesOwned;
+        this.sharesOwned = 0;
         this.ownerId = ownerId;
         transactions = new ArrayList<StockTransaction>();
     }
@@ -135,8 +134,7 @@ public class StockHolding extends AbstractEntity {
      */
     public static StockHolding buyShares(User user, String symbol, int numberOfShares) throws StockLookupException {
 
-        // make sure symbol matches case convention
-        symbol = symbol.toUpperCase();
+        // TODO - make sure symbol matches case convention
 
         // Get existing holding
         Map<String, StockHolding> userPortfolio = user.getPortfolio();
@@ -144,7 +142,7 @@ public class StockHolding extends AbstractEntity {
 
         // Create new holding, if user has never owned the stock before
         if (!userPortfolio.containsKey(symbol)) {
-            holding = new StockHolding(symbol, numberOfShares, user.getUid());
+            holding = new StockHolding(symbol, user.getUid());
             user.addHolding(holding);
         }
 
@@ -166,8 +164,7 @@ public class StockHolding extends AbstractEntity {
      */
     public static StockHolding sellShares(User user, String symbol, int numberOfShares) throws StockLookupException {
 
-        // make sure symbol matches case convention
-        symbol = symbol.toUpperCase();
+        // TODO - make sure symbol matches case convention
 
         // Get existing holding
         Map<String, StockHolding> userPortfolio = user.getPortfolio();
