@@ -12,7 +12,7 @@
 
     <div id="middle">
 
-        <p>The current price of <b th:text="${stock_desc}">SYMBOL (NAME)</b> is <b th:text="${stock_price}">PRICE</b>.</p>
+        <p>The current price of <b th:text="${stock_desc}">SYMBOL (NAME)</b> is $<b th:text="${stock_price}">PRICE</b>.</p>
 
         <div th:replace="quote_form :: form"></div>
 

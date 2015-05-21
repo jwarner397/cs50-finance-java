@@ -1,5 +1,7 @@
 package net.cs50.finance.controllers;
 
+import net.cs50.finance.models.Stock;
+import net.cs50.finance.models.StockLookupException;
 import net.cs50.finance.models.dao.StockHoldingDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,12 +30,25 @@ public class StockController extends AbstractFinanceController {
     }
 
     @RequestMapping(value = "/quote", method = RequestMethod.POST)
-    public String quote(String symbol, Model model) {
+    public String quote(String symbol, Model model) throws StockLookupException {
 
-        // TODO - Implement quote lookup
+        // Implemented quote lookup
+        // initiate Stock variable and call method to look up stock price
+        Stock stock;
+        try {
+            stock = Stock.lookupStock(symbol);
+        } catch (StockLookupException e) {
+            e.printStackTrace();
+            throw new StockLookupException("Unable to look up stock", symbol);
+        }
+
+        // format stock price to two decimal places
+        String price = String.format("%.2f", stock.getPrice());
 
         // pass data to template
         model.addAttribute("title", "Quote");
+        model.addAttribute("stock_desc", stock.getName());
+        model.addAttribute("stock_price", price);
         model.addAttribute("quoteNavClass", "active");
 
         return "quote_display";
