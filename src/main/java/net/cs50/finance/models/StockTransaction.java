@@ -43,6 +43,7 @@ public class StockTransaction extends AbstractEntity {
         this.type = type;
         this.userId = stockHolding.getOwnerId();
         this.price = Stock.lookupStock(symbol).getPrice();
+        this.shares = shares;
     }
 
     @ManyToOne

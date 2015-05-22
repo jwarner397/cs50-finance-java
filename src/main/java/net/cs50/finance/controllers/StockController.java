@@ -1,7 +1,9 @@
 package net.cs50.finance.controllers;
 
 import net.cs50.finance.models.Stock;
+import net.cs50.finance.models.StockHolding;
 import net.cs50.finance.models.StockLookupException;
+import net.cs50.finance.models.User;
 import net.cs50.finance.models.dao.StockHoldingDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +41,7 @@ public class StockController extends AbstractFinanceController {
             stock = Stock.lookupStock(symbol);
         } catch (StockLookupException e) {
             e.printStackTrace();
-            throw new StockLookupException("Unable to look up stock", symbol);
+            throw new StockLookupException("Unable to complete purchase", symbol);
         }
 
         // format stock price to two decimal places
@@ -64,13 +66,37 @@ public class StockController extends AbstractFinanceController {
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public String buy(String symbol, int numberOfShares, HttpServletRequest request, Model model) {
+    public String buy(String symbol, int numberOfShares, HttpServletRequest request, Model model) throws StockLookupException {
 
         // TODO - Implement buy action
+        Stock stock;
+        StockHolding holding;
+        try {
+            stock = Stock.lookupStock(symbol);
+        } catch (StockLookupException e) {
+            e.printStackTrace();
+            return displayError("Unable to complete purchase", model);
+        }
+
+        float purchasePrice = stock.getPrice() * numberOfShares;
+        User user = getUserFromSession(request);
+
+        if (user.getCash() < purchasePrice) {
+            return displayError("You do not have enough cash for this purchase", model);
+        } else {
+            holding = StockHolding.buyShares(user, symbol, numberOfShares);
+            // set user cash to new number
+            user.setCash(user.getCash() - purchasePrice);
+        }
+
+        stockHoldingDao.save(holding);
+        userDao.save(user);
+
 
         model.addAttribute("title", "Buy");
         model.addAttribute("action", "/buy");
         model.addAttribute("buyNavClass", "active");
+        model.addAttribute("confirmMessage", "Purchase was successful");
 
         return "transaction_confirm";
     }

@@ -27,16 +27,25 @@ public class User extends AbstractEntity {
      */
     private Map<String, StockHolding> portfolio;
 
-    // TODO - add cash to user class
+    //  add cash to user class
+    private float cash;
 
     public User(String userName, String password) {
         this.hash = PasswordHash.getHash(password);
         this.userName = userName;
         this.portfolio = new HashMap<String, StockHolding>();
+        this.cash = 10000;
     }
 
     // empty constructor so Spring can do its magic
     public User() {}
+
+    @Column(name = "cash")
+    public float getCash() {
+        return cash;
+    }
+
+    public void setCash(float cash){ this.cash = cash; }
 
     @NotNull
     @Column(name = "username", unique = true, nullable = false)

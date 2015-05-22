@@ -2,6 +2,7 @@ package net.cs50.finance.models;
 
 import net.cs50.finance.models.dao.StockHoldingDao;
 import net.cs50.finance.models.dao.StockTransactionDao;
+import net.cs50.finance.models.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
@@ -31,12 +32,10 @@ public class StockHolding extends AbstractEntity {
      */
     private List<StockTransaction> transactions;
 
-
-
     private StockHolding() {}
 
     private StockHolding(String symbol, int ownerId) {
-        // TODO - make sure symbol is always upper or lowercase (your choice)
+        // make sure symbol is always upper or lowercase (your choice)
         this.symbol = symbol.toUpperCase();
         this.sharesOwned = 0;
         this.ownerId = ownerId;
@@ -60,7 +59,7 @@ public class StockHolding extends AbstractEntity {
     }
 
     protected void setSymbol(String symbol) {
-        this.symbol = symbol;
+        this.symbol = symbol.toUpperCase();
     }
 
     @NotNull
@@ -87,7 +86,7 @@ public class StockHolding extends AbstractEntity {
      *
      * @param numberOfShares
      * @throws IllegalArgumentException if numberOfShares < 0
-     * @throws StockLookupException     if unable to lookup stock info
+     * @throws StockLookupException if unable to lookup stock info
      */
     private void buyShares(int numberOfShares) throws StockLookupException {
 
@@ -96,7 +95,15 @@ public class StockHolding extends AbstractEntity {
         }
 
         setSharesOwned(sharesOwned + numberOfShares);
-        // TODO - update user cash on buy
+
+        // look up price for stock to calculate purchase price
+        /*Stock stock;
+        try {
+            stock = Stock.lookupStock(symbol);
+        } catch (StockLookupException e) {
+            e.printStackTrace();
+            throw new StockLookupException("Unable to get stock price", symbol);
+        }*/
 
         StockTransaction transaction = new StockTransaction(this, numberOfShares, StockTransaction.TransactionType.BUY);
         this.transactions.add(transaction);
@@ -116,7 +123,7 @@ public class StockHolding extends AbstractEntity {
         }
 
         setSharesOwned(sharesOwned - numberOfShares);
-        // TODO - update user cash on sale
+
 
         StockTransaction transaction = new StockTransaction(this, numberOfShares, StockTransaction.TransactionType.SELL);
         this.transactions.add(transaction);
@@ -134,7 +141,8 @@ public class StockHolding extends AbstractEntity {
      */
     public static StockHolding buyShares(User user, String symbol, int numberOfShares) throws StockLookupException {
 
-        // TODO - make sure symbol matches case convention
+        // make sure symbol matches case convention
+        symbol = symbol.toUpperCase();
 
         // Get existing holding
         Map<String, StockHolding> userPortfolio = user.getPortfolio();
@@ -164,7 +172,8 @@ public class StockHolding extends AbstractEntity {
      */
     public static StockHolding sellShares(User user, String symbol, int numberOfShares) throws StockLookupException {
 
-        // TODO - make sure symbol matches case convention
+        // make sure symbol matches case convention
+        symbol = symbol.toUpperCase();
 
         // Get existing holding
         Map<String, StockHolding> userPortfolio = user.getPortfolio();
