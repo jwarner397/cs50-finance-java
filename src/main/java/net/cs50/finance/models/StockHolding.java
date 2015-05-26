@@ -96,15 +96,6 @@ public class StockHolding extends AbstractEntity {
 
         setSharesOwned(sharesOwned + numberOfShares);
 
-        // look up price for stock to calculate purchase price
-        /*Stock stock;
-        try {
-            stock = Stock.lookupStock(symbol);
-        } catch (StockLookupException e) {
-            e.printStackTrace();
-            throw new StockLookupException("Unable to get stock price", symbol);
-        }*/
-
         StockTransaction transaction = new StockTransaction(this, numberOfShares, StockTransaction.TransactionType.BUY);
         this.transactions.add(transaction);
     }
