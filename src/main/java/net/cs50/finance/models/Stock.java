@@ -80,7 +80,6 @@ public class Stock {
         }
 
         // stockInfo should be a collection like { "YHOO", "Yahoo, Inc.", 123.45 }
-        // String.format("%.2f", floatValue);
         return new Stock(stockInfo.get(0), stockInfo.get(1), Float.parseFloat(stockInfo.get(2)));
     }
 

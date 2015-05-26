@@ -37,6 +37,7 @@ public class StockTransaction extends AbstractEntity {
     private StockHolding stockHolding;
 
     public StockTransaction(StockHolding stockHolding, int shares, TransactionType type) throws StockLookupException {
+        this.shares = shares;
         this.stockHolding = stockHolding;
         this.transactionTime = new Date();
         this.symbol = stockHolding.getSymbol();
