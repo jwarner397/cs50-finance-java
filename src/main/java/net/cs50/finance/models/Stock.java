@@ -80,6 +80,11 @@ public class Stock {
         }
 
         // stockInfo should be a collection like { "YHOO", "Yahoo, Inc.", 123.45 }
+        // if Yahoo could not find the symbol, we'll get { symbol, "N/A", "N/A" }
+        if (stockInfo.get(1).equals("N/A") || stockInfo.get(2).equals("N/A")) {
+            throw new StockLookupException("Not a valid stock symbol", symbol);
+        }
+
         return new Stock(stockInfo.get(0), stockInfo.get(1), Float.parseFloat(stockInfo.get(2)));
     }
 

@@ -81,6 +81,7 @@ public class StockHolding extends AbstractEntity {
         this.transactions = transactions;
     }
 
+
     /**
      * Instance method for buying shares of a holding
      *

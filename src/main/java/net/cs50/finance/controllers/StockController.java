@@ -120,7 +120,6 @@ public class StockController extends AbstractFinanceController {
 
         // Implement sell action
         Stock stock;
-        StockHolding holding;
 
         // look up info for stock to sell
         try {
